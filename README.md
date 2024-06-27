@@ -1,2 +1,2 @@
 # CSA-Array-List
-Array List projects for APCSA summer work
+Projects for APCSA summer work
