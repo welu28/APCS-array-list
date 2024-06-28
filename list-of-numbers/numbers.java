@@ -8,7 +8,7 @@ public class numbers
     private int max;
     private Random random = new Random();
 
-    public void createList(int size) {
+    public numbers(int size) {
         numbers = new ArrayList<>();
         for(int i = 0; i < size; i++) {
             int curr = random.nextInt(1, 20) + 1;
