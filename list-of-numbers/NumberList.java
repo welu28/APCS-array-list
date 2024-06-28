@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class numbers
+public class NumberList
 {
     private List<Integer> numbers;
     private HashMap<Integer, Integer> occurences = new HashMap<>(); // to find the mode
