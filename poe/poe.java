@@ -42,6 +42,19 @@ public class poe {
         }
         scanner.close();
         pw.close();
+
+
+        Scanner io = new Scanner(System.in);
+        // user input
+        System.out.println("Enter a word: ");
+        String word = io.next();
+        if(wordCounts.containsKey(word)) {
+            System.out.println("Number of occurences: " + wordCounts.get(word));
+        }
+        else {
+            System.out.println("WORD NOT IN BOOK");
+        }
+        io.close();
     }
 
     public static ArrayList<String> modes(HashMap<String, Integer> occurences) {
