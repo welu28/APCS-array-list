@@ -1,2 +1,2 @@
-# APCS-summer-work
-Projects for APCSA summer work
+# APCS-array-list
+Array list projects for APCSA summer work
