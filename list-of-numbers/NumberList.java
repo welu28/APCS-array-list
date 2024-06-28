@@ -8,7 +8,7 @@ public class NumberList
     private int max;
     private Random random = new Random();
 
-    public numbers(int size) {
+    public NumberList(int size) {
         numbers = new ArrayList<>();
         for(int i = 0; i < size; i++) {
             int curr = random.nextInt(1, 20) + 1;
@@ -41,5 +41,11 @@ public class NumberList
 
     public int max() {
         return max;
+    }
+
+    public void printList() {
+        for(int elem: numbers) {
+            System.out.print(elem + " ");
+        }
     }
 }
