@@ -1,3 +1,5 @@
+
+
 import java.util.*;
 import java.io.*;
 
@@ -6,8 +8,8 @@ public class poe {
         ".", ",", ";", ":", "?", "!", "—", "'", "\"", "(", ")", "..."
     };
 
-    public static void main(String[] args) throws IOException {
-        Scanner scanner = new Scanner(new File("poemodified.txt"));
+    public static void main(String[] args) throws FileNotFoundException {
+        Scanner scanner = new Scanner(new File("poeModified.txt"));
         PrintWriter pw = new PrintWriter(new File("count.txt"));
 
         HashMap<String, Integer> wordCounts = new HashMap<>();
@@ -18,7 +20,7 @@ public class poe {
             String curr = scanner.next().toLowerCase();
             for (String punct : punctuation) {
                 if (curr.contains(punct)) {
-                    // Remove punctuation from the word
+                    //remove punctuation from the word
                     curr = curr.replaceAll("\\" + punct, "");
                 }
             }
@@ -43,17 +45,25 @@ public class poe {
         scanner.close();
         pw.close();
 
+        
 
         Scanner io = new Scanner(System.in);
         // user input
         System.out.println("Enter a word: ");
         String word = io.next();
+        long startTime = System.currentTimeMillis();
+        System.out.println("Search started at: " + new Date(startTime));
+
         if(wordCounts.containsKey(word)) {
             System.out.println("Number of occurences: " + wordCounts.get(word));
         }
         else {
             System.out.println("WORD NOT IN BOOK");
         }
+        
+        long endTime = System.currentTimeMillis();
+        System.out.println("Search ended at: " + new Date(endTime));
+        System.out.println("Search duration: " + (endTime - startTime) + " milliseconds");
         io.close();
     }
 

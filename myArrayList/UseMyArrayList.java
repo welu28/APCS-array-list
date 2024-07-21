@@ -2,9 +2,7 @@
 	Trivial application that displays a string
 */
 
-import java.util.*;
-
-public class TestMyArrayList 
+public class UseMyArrayList 
 {
 
 	public static void main(String args[]) 
