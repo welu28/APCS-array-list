@@ -13,6 +13,7 @@ public class poe {
         PrintWriter pw = new PrintWriter(new File("count.txt"));
 
         HashMap<String, Integer> wordCounts = new HashMap<>();
+        List<String> words = new ArrayList<>();
         
         int totalWords = 0; // total number of words, doesn't have to be unique
 
@@ -25,6 +26,7 @@ public class poe {
                 }
             }
             wordCounts.put(curr, wordCounts.getOrDefault(curr, 0) + 1);
+            words.add(curr);
             totalWords++;
         }
 
@@ -45,14 +47,14 @@ public class poe {
         scanner.close();
         pw.close();
 
-        
+        sort(words.toArray(new String[0]));
 
         Scanner io = new Scanner(System.in);
         // user input
         System.out.println("Enter a word: ");
         String word = io.next();
         long startTime = System.currentTimeMillis();
-        System.out.println("Search started at: " + new Date(startTime));
+        System.out.println("HashMap search started at: " + new Date(startTime));
 
         if(wordCounts.containsKey(word)) {
             System.out.println("Number of occurences: " + wordCounts.get(word));
@@ -62,9 +64,44 @@ public class poe {
         }
         
         long endTime = System.currentTimeMillis();
-        System.out.println("Search ended at: " + new Date(endTime));
-        System.out.println("Search duration: " + (endTime - startTime) + " milliseconds");
+        System.out.println("HashMap ended at: " + new Date(endTime));
+        System.out.println("HashMap search duration: " + (endTime - startTime) + " milliseconds");
         io.close();
+    }
+
+    public static void sort(String[] words) { // compare bubble sort with default sort (merge sort)
+        // make a copy so we don't change the original array
+        String[] copyA = Arrays.copyOf(words, words.length);
+        String[] copyB = Arrays.copyOf(words, words.length);
+
+        long start = System.currentTimeMillis();
+        bubbleSort(copyA);
+        long end = System.currentTimeMillis();
+        System.out.println("bubble sort time: " + (end - start) + " milliseconds");
+
+        start = System.currentTimeMillis();
+        Arrays.sort(copyB);
+        end = System.currentTimeMillis();
+        System.out.println("java arrays sort time: " + (end - start) + " milliseconds");
+    }
+
+    /*
+     * Bubble sort iterates over the list, compares adjacent items, and swaps them if they are in the wrong order. 
+     * This continues until the list is sorted. 
+     * The algorithm’s name comes from the fact that smaller elements "bubble" to the top of the list. 
+     * Despite its simplicity, bubble sort is inefficient and is O(n^2).
+     */
+    public static void bubbleSort(String[] arr) {
+        int n = arr.length;
+        for(int i = 0; i < n-1; i++) {
+            for(int j = 0; j < n-(i+1); j++) { // so that we only compare up to i
+                if(arr[j].compareTo(arr[j+1]) > 0) {
+                    String temp = arr[j];
+                    arr[j] = arr[j+1];
+                    arr[j+1] = temp;
+                }
+            }
+        }
     }
 
     public static ArrayList<String> modes(HashMap<String, Integer> occurences) {
