@@ -1,6 +1,3 @@
-Total words: 2354
-Total unique words: 797
-Most occuring words: the 
 Occurences of each word:
 --------------------------------
 half: 1

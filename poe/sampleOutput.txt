@@ -1,0 +1,37 @@
+Total words: 2354
+Total unique words: 797
+Most occuring words: 
+the
+_______________________________________________
+bubble sort:
+Start time: 1721772091155
+End time: 1721772091207
+bubble sort time: 52 milliseconds
+_______________________________________________
+default java.arrays sort:
+Start time: 1721772091207
+End time: 1721772091207
+java arrays sort time: 0 milliseconds
+_______________________________________________
+Enter a word:
+the
+_______________________________________________
+binary search:
+Start time: 1721772092855
+Word count: 169
+End time: 1721772092855
+binary search time: 0 milliseconds
+_______________________________________________
+sequential search:
+Start time: 1721772092855
+Word count: 169
+End time: 1721772092855
+sequential search time: 0 milliseconds
+_______________________________________________
+hashmap search:
+Start time: 1721772092855
+Word count: 169
+End time: 1721772092871
+hashmap search duration: 16 milliseconds
+_______________________________________________
+check count.txt for more information about word count

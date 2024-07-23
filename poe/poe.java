@@ -30,14 +30,16 @@ public class poe {
             totalWords++;
         }
 
-        pw.println("Total words: " + totalWords);
-        pw.println("Total unique words: " + wordCounts.size());
-        pw.print("Most occuring words: ");
+        System.out.println("Total words: " + totalWords);
+        System.out.println("Total unique words: " + wordCounts.size());
+        System.out.println("Most occuring words: ");
         ArrayList<String> modes = modes(wordCounts);
         for(String elem: modes) {
-            pw.print(elem + " ");
+            System.out.print(elem + ", ");
         }
-        pw.println();
+        System.out.println();
+        System.out.println("_______________________________________________");
+        // put occurences in count.txt
         pw.println("Occurences of each word:");
         pw.println("--------------------------------");
 
@@ -59,7 +61,8 @@ public class poe {
         search(arr, word);
 
         long startTime = System.currentTimeMillis();
-        System.out.println("hashmap search started at: " + new Date(startTime));
+        System.out.println("hashmap search:");
+        System.out.println("Start time: " + startTime);
 
         if(wordCounts.containsKey(word)) {
             System.out.println("Word count: " + wordCounts.get(word));
@@ -69,7 +72,7 @@ public class poe {
         }
         
         long endTime = System.currentTimeMillis();
-        System.out.println("hashmap search ended at: " + new Date(endTime));
+        System.out.println("End time: " + endTime);
         System.out.println("hashmap search duration: " + (endTime - startTime) + " milliseconds");
         System.out.println("_______________________________________________");
         System.out.print("check count.txt for more information about word count");
@@ -84,16 +87,20 @@ public class poe {
         Arrays.sort(copyA);
         System.out.println("binary search:");
         long start = System.currentTimeMillis();
+        System.out.println("Start time: " + start);
         binarySearch(copyA, word);
         long end = System.currentTimeMillis();
+        System.out.println("End time: " + end);
         System.out.println("binary search time: " + (end - start) + " milliseconds");
         System.out.println("_______________________________________________");
 
         System.out.println("sequential search:");
         start = System.currentTimeMillis();
+        System.out.println("Start time: " + start);
         // O(n logn)
         sequentialSearch(copyB, word);
         end = System.currentTimeMillis();
+        System.out.println("End time: " + end);
         System.out.println("sequential search time: " + (end - start) + " milliseconds");
         System.out.println("_______________________________________________");
     }
@@ -146,16 +153,22 @@ public class poe {
         String[] copyB = Arrays.copyOf(words, words.length);
 
         long start = System.currentTimeMillis();
+        System.out.println("bubble sort:");
+        System.out.println("Start time: " + start);
         // O(n^2)
         bubbleSort(copyA);
         long end = System.currentTimeMillis();
+        System.out.println("End time: " + end);
         System.out.println("bubble sort time: " + (end - start) + " milliseconds");
         System.out.println("_______________________________________________");
 
+        System.out.println("default java.arrays sort:");
         start = System.currentTimeMillis();
+        System.out.println("Start time: " + start);
         // O(n logn)
         Arrays.sort(copyB);
         end = System.currentTimeMillis();
+        System.out.println("End time: " + end);
         System.out.println("java arrays sort time: " + (end - start) + " milliseconds");
         System.out.println("_______________________________________________");
     }
@@ -164,7 +177,7 @@ public class poe {
      * Bubble sort iterates over the list, compares adjacent items, and swaps them if they are in the wrong order. 
      * This continues until the list is sorted. 
      * The algorithm’s name comes from the fact that smaller elements "bubble" to the top of the list. 
-     * Despite its simplicity, bubble sort is inefficient and is O(n^2).
+     * Although it is simple, bubble sort is inefficient and is O(n^2).
      */
     public static void bubbleSort(String[] arr) {
         int n = arr.length;
