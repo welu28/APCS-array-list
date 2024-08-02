@@ -4,8 +4,8 @@ public class NumberList
 {
     private List<Integer> numbers;
     private HashMap<Integer, Integer> occurences = new HashMap<>(); // to find the mode
-    private int min;
-    private int max;
+    private int min = Integer.MAX_VALUE;
+    private int max = Integer.MIN_VALUE;
     private Random random = new Random();
 
     public NumberList(int size) {
