@@ -7,121 +7,111 @@ public class poe {
     };
 
     public static void main(String[] args) throws FileNotFoundException {
-        Scanner scanner = new Scanner(new File("poeModified.txt"));
-        PrintWriter pw = new PrintWriter(new File("count.txt"));
+        Scanner scanner = new Scanner(new File("poe/poeModified.txt"));
+        PrintWriter pw = new PrintWriter(new File("poe/count.txt"));
 
-        HashMap<String, Integer> wordCounts = new HashMap<>();
-        List<String> words = new ArrayList<>();
+        HashMap<String, Word> wordCounts = new HashMap<>();
+        List<Word> words = new ArrayList<>();
         
-        int totalWords = 0; // total number of words, doesn't have to be unique
+        int totalWords = 0;
 
         while(scanner.hasNext()) {
             String curr = scanner.next().toLowerCase();
             for (String punct : punctuation) {
                 if (curr.contains(punct)) {
-                    //remove punctuation from the word
                     curr = curr.replaceAll("\\" + punct, "");
                 }
             }
-            wordCounts.put(curr, wordCounts.getOrDefault(curr, 0) + 1);
-            words.add(curr);
+            if (wordCounts.containsKey(curr)) {
+                wordCounts.get(curr).incrementCount();
+            } else {
+                Word newWord = new Word(curr, 1);
+                wordCounts.put(curr, newWord);
+                words.add(newWord);
+            }
             totalWords++;
         }
 
         System.out.println("Total words: " + totalWords);
         System.out.println("Total unique words: " + wordCounts.size());
-        System.out.println("Most occuring words: ");
-        ArrayList<String> modes = modes(wordCounts);
-        for(String elem: modes) {
+        System.out.println("Most occurring words: ");
+        ArrayList<Word> modes = modes(wordCounts);
+        for (Word elem : modes) {
             System.out.print(elem + ", ");
         }
         System.out.println();
         System.out.println("_______________________________________________");
-        // put occurences in count.txt
-        pw.println("Occurences of each word:");
+
+        pw.println("Occurrences of each word:");
         pw.println("--------------------------------");
 
-        for(Map.Entry<String, Integer> entry: wordCounts.entrySet()) {
-            pw.println(entry.getKey() + ": " + entry.getValue());
+        for (Word word : words) {
+            pw.println(word);
         }
         scanner.close();
         pw.close();
 
-        String[] arr = words.toArray(new String[0]);
-        sort(arr); // compare the sorting times, but don't actually sort yet (keep unordered for search)
-        
+        Word[] arr = words.toArray(new Word[0]);
+        sort(arr); // compare the sorting times, but don't actually sort yet
 
         Scanner io = new Scanner(System.in);
-        // user input
         System.out.println("Enter a word: ");
         String word = io.next();
         System.out.println("_______________________________________________");
         search(arr, word);
 
         long startTime = System.currentTimeMillis();
-        System.out.println("hashmap search:");
+        System.out.println("HashMap search:");
         System.out.println("Start time: " + startTime);
 
-        if(wordCounts.containsKey(word)) {
-            System.out.println("Word count: " + wordCounts.get(word));
-        }
-        else {
+        if (wordCounts.containsKey(word)) {
+            System.out.println("Word count: " + wordCounts.get(word).getCount());
+        } else {
             System.out.println("WORD NOT IN BOOK");
         }
         
         long endTime = System.currentTimeMillis();
         System.out.println("End time: " + endTime);
-        System.out.println("hashmap search duration: " + (endTime - startTime) + " milliseconds");
+        System.out.println("HashMap search duration: " + (endTime - startTime) + " milliseconds");
         System.out.println("_______________________________________________");
-        System.out.print("check count.txt for more information about word count");
+        System.out.print("Check count.txt for more information about word count");
         io.close();
     }
 
-    public static void search(String[] words, String word) {
-        // make a copy so we don't change the original array
-        String[] copyA = Arrays.copyOf(words, words.length);
-        String[] copyB = Arrays.copyOf(words, words.length);
+    public static void search(Word[] words, String word) {
+        Word[] copyA = Arrays.copyOf(words, words.length);
+        Word[] copyB = Arrays.copyOf(words, words.length);
 
         Arrays.sort(copyA);
-        System.out.println("binary search:");
+        System.out.println("Binary search:");
         long start = System.currentTimeMillis();
         System.out.println("Start time: " + start);
         binarySearch(copyA, word);
         long end = System.currentTimeMillis();
         System.out.println("End time: " + end);
-        System.out.println("binary search time: " + (end - start) + " milliseconds");
+        System.out.println("Binary search time: " + (end - start) + " milliseconds");
         System.out.println("_______________________________________________");
 
-        System.out.println("sequential search:");
+        System.out.println("Sequential search:");
         start = System.currentTimeMillis();
         System.out.println("Start time: " + start);
-        // O(n logn)
         sequentialSearch(copyB, word);
         end = System.currentTimeMillis();
         System.out.println("End time: " + end);
-        System.out.println("sequential search time: " + (end - start) + " milliseconds");
+        System.out.println("Sequential search time: " + (end - start) + " milliseconds");
         System.out.println("_______________________________________________");
     }
 
-    public static void binarySearch(String[] a, String word) {
+    public static void binarySearch(Word[] a, String word) {
         int low = 0;
         int high = a.length - 1;
         
         while (low <= high) {
-            int mid = low + (high - low) / 2; // midpoint
-            int comparison = a[mid].compareTo(word);
+            int mid = low + (high - low) / 2;
+            int comparison = a[mid].getWord().compareTo(word);
             
-            if (comparison == 0) { // found the word
-                int count = 0;
-                while (mid >= 0 && a[mid].equals(word)) {
-                    count++;
-                    mid--;
-                }
-                mid = low + (high - low) / 2 + 1; // reset mid to 1 greater than the initial position
-                while (mid < a.length && a[mid].equals(word)) {
-                    count++;
-                    mid++;
-                }
+            if (comparison == 0) {
+                int count = a[mid].getCount();
                 System.out.println("Word count: " + count);
                 return;
             } else if (comparison < 0) {
@@ -134,74 +124,69 @@ public class poe {
         System.out.println("WORD NOT IN BOOK");
     }
 
-    public static void sequentialSearch(String[] a, String word) {
+    public static void sequentialSearch(Word[] a, String word) {
         int count = 0;
-        for(int i = 0; i < a.length; i++) {
-            count += a[i].equals(word) ? 1 : 0;
+        for (Word w : a) {
+            if (w.getWord().equals(word)) {
+                count = w.getCount();
+                break;
+            }
         }
-        if(count == 0) {
+        if (count == 0) {
             System.out.println("WORD NOT IN BOOK");
+        } else {
+            System.out.println("Word count: " + count);
         }
-        else System.out.println("Word count: " + count);
     }
 
-    public static void sort(String[] words) { // compare bubble sort with default sort (merge sort)
-        // make a copy so we don't change the original array
-        String[] copyA = Arrays.copyOf(words, words.length);
-        String[] copyB = Arrays.copyOf(words, words.length);
+    public static void sort(Word[] words) {
+        Word[] copyA = Arrays.copyOf(words, words.length);
+        Word[] copyB = Arrays.copyOf(words, words.length);
 
         long start = System.currentTimeMillis();
-        System.out.println("bubble sort:");
+        System.out.println("Bubble sort:");
         System.out.println("Start time: " + start);
-        // O(n^2)
         bubbleSort(copyA);
         long end = System.currentTimeMillis();
         System.out.println("End time: " + end);
-        System.out.println("bubble sort time: " + (end - start) + " milliseconds");
+        System.out.println("Bubble sort time: " + (end - start) + " milliseconds");
         System.out.println("_______________________________________________");
 
-        System.out.println("default java.arrays sort:");
+        System.out.println("Default Java Arrays sort:");
         start = System.currentTimeMillis();
         System.out.println("Start time: " + start);
-        // O(n logn)
         Arrays.sort(copyB);
         end = System.currentTimeMillis();
         System.out.println("End time: " + end);
-        System.out.println("java arrays sort time: " + (end - start) + " milliseconds");
+        System.out.println("Java Arrays sort time: " + (end - start) + " milliseconds");
         System.out.println("_______________________________________________");
     }
 
-    /*
-     * Bubble sort iterates over the list, compares adjacent items, and swaps them if they are in the wrong order. 
-     * This continues until the list is sorted. 
-     * The algorithm’s name comes from the fact that smaller elements "bubble" to the top of the list. 
-     * Although it is simple, bubble sort is inefficient and is O(n^2).
-     */
-    public static void bubbleSort(String[] arr) {
+    public static void bubbleSort(Word[] arr) {
         int n = arr.length;
-        for(int i = 0; i < n-1; i++) {
-            for(int j = 0; j < n-(i+1); j++) { // so that we only compare up to i
-                if(arr[j].compareTo(arr[j+1]) > 0) {
-                    String temp = arr[j];
-                    arr[j] = arr[j+1];
-                    arr[j+1] = temp;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - (i + 1); j++) {
+                if (arr[j].compareTo(arr[j + 1]) > 0) {
+                    Word temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
                 }
             }
         }
     }
 
-    public static ArrayList<String> modes(HashMap<String, Integer> occurences) {
-        ArrayList<String> modes = new ArrayList<>();
-        int maxOccurences = 0;
-        for(Map.Entry<String, Integer> entry: occurences.entrySet()) {
-            String key = entry.getKey();
-            int value = entry.getValue();
-            if(value > maxOccurences) {
-                maxOccurences = value;
+    public static ArrayList<Word> modes(HashMap<String, Word> occurrences) {
+        ArrayList<Word> modes = new ArrayList<>();
+        int maxOccurrences = 0;
+        for (Word word : occurrences.values()) {
+            int value = word.getCount();
+            if (value > maxOccurrences) {
+                maxOccurrences = value;
                 modes.clear();
-                modes.add(key);
+                modes.add(word);
+            } else if (value == maxOccurrences) {
+                modes.add(word);
             }
-            else if(value == maxOccurences) modes.add(key);
         }
 
         return modes;
